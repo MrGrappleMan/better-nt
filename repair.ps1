@@ -55,6 +55,7 @@
         # takeown /r /a /d y /f $env:SystemDrive\Windows.old # Takes permissions before deleting old Windows, risky
         Remove-Item -Path $env:SystemDrive\Windows.old -Recurse -Force # Removes old Windows data
 
+        slmgr /ato
 # Malware Scan
     # Windows Defender Offline scan
         Start-MpWDOScan

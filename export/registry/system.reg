@@ -4,25 +4,25 @@ Windows Registry Editor Version 5.00
 ; ⚙️ System Tweaks
 ; --------------------------------------------
 
-; 🗄️ Allow uncapped file path length
+; Allow uncapped file path length
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
 "LongPathsEnabled"=dword:00000001
 
-; 🕵️ Only load drivers signed by modern WHQL implementation
+; Only load drivers signed by modern WHQL implementation
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Policy]
 "UpgradedSystem"=dword:00000000
 
-; 👟 Fast startup, precaches the OS, but you are better off leaving your device on s2idle
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem]
+; Fast startup, precaches the OS, but you are better off leaving your device on s2idle
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Power]
 "HiberbootEnabled"=dword:00000001
 
-; ⏩ No startup delay - parallize unless order is required
+; No startup delay - parallize unless order is required
 [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize]
 "StartupDelayInMSec"=dword:00000000
 
-;; 📋 Memory Management
+;; Memory Management
 
-; 🔜 Prefetch/Superfetch - preload data based on predictions, it gets cleared once true demand is seen
+; Prefetch/Superfetch - preload data based on predictions, it gets cleared once true demand is seen
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters]
 "EnablePrefetcher"=dword:00000003
 "EnableSuperfetch"=dword:00000003
@@ -46,7 +46,7 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Dfrg\BootOptimizeFunction]
 "Enable"="Y"
 
-; 🌇 Post Processing Scheduling
+; Post Processing Scheduling
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\DisplayPostProcessing]
 "Affinity"=dword:00000000
 "Background Only"="False"
@@ -58,7 +58,7 @@ Windows Registry Editor Version 5.00
 "SFIO Priority"="High"
 "Latency Sensitive"="False"
 
-; 🎮 Games Scheduling
+; Games Scheduling
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games]
 "Affinity"=dword:00000000
 "Background Only"="False"
@@ -69,7 +69,7 @@ Windows Registry Editor Version 5.00
 "SFIO Priority"="High"
 "Latency Sensitive"="True"
 
-; 🔊 Audio Scheduling
+; Audio Scheduling
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Audio]
 "Affinity"=dword:00000000
 "Background Only"="False"
@@ -79,7 +79,7 @@ Windows Registry Editor Version 5.00
 ; "Scheduling Category"="Medium"
 ; "SFIO Priority"="Normal"
 
-; 😶‍🌫️ Prioritize foreground over background
+; Prioritize foreground over background
 ; 1:1 or No Foreground boost, Fixed length / Long quantum:-
 ; Low overhead, High throughput, deterministic tasks, best for server workloads and batch processing
 ; "Win32PrioritySeparation"=dword:00000024
@@ -93,6 +93,6 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl]
 "Win32PrioritySeparation"=dword:00000038
 
-; 🏁 No reservation for backgroud processes - less biased/no QoS
+; No reservation for backgroud processes - less biased/no QoS
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile]
 "SystemResponsiveness"=dword:00000000

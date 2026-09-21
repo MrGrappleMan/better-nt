@@ -1,41 +1,51 @@
-# Start
+# Starter script
 
-# Admin rights. If not, try self-elevate, or exit if user cancels
-  if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-        Write-Host "Not running as administrator, please try again with Ctrl + Shift + Enter"
-        Start-Sleep -Seconds 3
-        #powershell irm https://raw.githubusercontent.com/MrGrappleMan/windosill/main/start.ps1 | iex
-        # Want to implement self elevation method here, ofcourse respecting user choice
-        exit 
+# Check for root else retry
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+        Write-Host "Not running as administrator, please accept the UAC prompt that appears soon"
+        Start-Sleep -Seconds 6
+        try {
+            # Attempt to relaunch as Admin
+            Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"Invoke-Expression (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/user/repo/main/start.ps1' -UseBasicParsing).Content`""
+            exit
+        }
+        catch {
+            # If user disagrees, run this
+            Write-Host "Admin rights not granted, you may not have the necessary permissions to proceed" -ForegroundColor Red
+            Start-Sleep -Seconds 3
+            exit
+        }
     }
+    catch {
+        # If user disagrees, run this
+        Write-Host "Admin rights not granted, you may not have the necessary permissions to proceed" -ForegroundColor Red
+        Start-Sleep -Seconds 3
+        exit
+    }
+}
 
-# 📂 Repo directory
-    $path = "$env:windir\Temp\windosill"
-    if (Test-Path $path) { Remove-Item $path -Recurse -Force }
-    New-Item -Path $path -ItemType Directory -Force | Out-Null
-
-# Git checks and installs
+# Install Git
     if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
         winget install --id Git.Git -e --source winget
-        # Refresh environment variables (PATH)
+        # Refresh env vars
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" +
             [System.Environment]::GetEnvironmentVariable("Path", "User")
 
-        # Re-check Git availability after installation
+        # Stop if git installation fails
         if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
             Write-Host "git installation failed. Exiting..." -ForegroundColor Red
             exit
         }
     }
 
-# Clone Repo
-    git clone https://github.com/MrGrappleMan/windosill.git $path
+# Repo actions
+    $path = "$env:windir\Temp\windosill"
+    if (Test-Path $path) { Remove-Item $path -Recurse -Force } # Delete existing repo
+    New-Item -Path $path -ItemType Directory -Force | Out-Null # Remake repo folder
+    git clone https://github.com/MrGrappleMan/windosill.git $path # Clone repo
+    Set-Location $path # Set location to repo folder
 
-# Enter repo directory
-    # Everything is intended to run in relation to the repo directory
-    Set-Location $path
-
-# Copy over files
+# Copy to system drive
     robocopy .\fsroot $env:systemdrive /E
 
 # Start main script

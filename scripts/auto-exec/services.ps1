@@ -1,6 +1,6 @@
 # Services
 
-# Required for the package management and updates stack for Windows
+# Services to start automatically
 $on = @(
     # Updates and WinGet
         "UsoSvc",
@@ -28,10 +28,6 @@ $on = @(
         "BTAGService",
         "bthserv"
 )
-
-# Microsoft telemetry
-#    "DiagTrack",
-#    "wisvc"
 
 # Uncategorized
 $uncategorized = @(
@@ -72,7 +68,7 @@ function Set-WindowsServices {
     foreach ($config in $configurations) {
         foreach ($svcName in $config.List) {
             $svc = Get-Service -Name $svcName -ErrorAction SilentlyContinue
-            
+
             if (-not $svc) {
                 Write-Host "⚠️ Service non-existent: $svcName" -ForegroundColor Yellow
                 continue
